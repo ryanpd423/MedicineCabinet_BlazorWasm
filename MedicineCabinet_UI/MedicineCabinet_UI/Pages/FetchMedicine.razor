@@ -1,0 +1,61 @@
+@page "/fetchdata"
+@inject HttpClient Http
+
+<h1>List of Medicines</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (medicines == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Dosage</th>
+                <th>Brand</th>
+                <th>Pharmacy</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var medicine in medicines)
+            {
+            <tr>
+                <td>@medicine.Name</td>
+                <td>@medicine.Quantity</td>
+                <td>@medicine.Dosage</td>
+                <td>@medicine.Brand</td>
+                <td>@medicine.Pharmacy</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Medicine[] medicines;
+
+    protected override async Task OnInitializedAsync()
+    {
+        medicines = await Http.GetFromJsonAsync<Medicine[]>("https://localhost:5001/api/Medicine");
+    }
+
+    public class Medicine
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public int Quantity { get; set; }
+
+        public int Dosage { get; set; }
+
+        public string Brand { get; set; }
+
+        public string Pharmacy { get; set; }
+    }
+}
