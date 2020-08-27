@@ -1,5 +1,8 @@
-@page "/fetchdata"
+@using MedicineCabinet_UI.Models
+
+@page "/fetchMedicine"
 @inject HttpClient Http
+
 
 <h1>List of Medicines</h1>
 
@@ -24,13 +27,13 @@ else
         <tbody>
             @foreach (var medicine in medicines)
             {
-            <tr>
-                <td>@medicine.Name</td>
-                <td>@medicine.Quantity</td>
-                <td>@medicine.Dosage</td>
-                <td>@medicine.Brand</td>
-                <td>@medicine.Pharmacy</td>
-            </tr>
+                <tr>
+                    <td>@medicine.Name</td>
+                    <td>@medicine.Quantity</td>
+                    <td>@medicine.Dosage</td>
+                    <td>@medicine.Brand</td>
+                    <td>@medicine.Pharmacy</td>
+                </tr>
             }
         </tbody>
     </table>
@@ -42,20 +45,5 @@ else
     protected override async Task OnInitializedAsync()
     {
         medicines = await Http.GetFromJsonAsync<Medicine[]>("https://localhost:5001/api/Medicine");
-    }
-
-    public class Medicine
-    {
-        public string Id { get; set; }
-
-        public string Name { get; set; }
-
-        public int Quantity { get; set; }
-
-        public int Dosage { get; set; }
-
-        public string Brand { get; set; }
-
-        public string Pharmacy { get; set; }
     }
 }

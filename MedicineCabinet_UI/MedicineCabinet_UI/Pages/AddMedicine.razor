@@ -1,0 +1,35 @@
+﻿@using MedicineCabinet_UI.Models
+
+@page "/addMedicine"
+@inject HttpClient Http
+
+<h1>Add New Medicine</h1>
+
+<p>Name of New Medicine Added: @newMedicine</p>
+
+<EditForm Model="@newMedicine" OnSubmit="@HandleAddNewMedicine">
+    <InputText id="name" @bind-Value="newMedicine.Name" />
+    <InputNumber id="quantity" @bind-Value="newMedicine.Quantity" />
+    <InputNumber id="dosage" @bind-Value="newMedicine.Dosage" />
+    <InputText id="brand" @bind-Value="newMedicine.Brand" />
+    <InputText id="pharmacy" @bind-Value="newMedicine.Pharmacy" />
+
+    <button class="btn btn-primary" type="submit">Add New Medicine</button>
+</EditForm>
+
+<button class="btn btn-primary" @onclick="HandleAddNewMedicine">Add New Medicine</button>
+
+@code {
+            // has to be initted due to some dumb MSFT Blazor Bug with a terrible error message (https://github.com/dotnet/aspnetcore/issues/11331)
+            private Medicine newMedicine = new Medicine();
+
+            // TODO: Add validators and logging
+
+            private async void HandleAddNewMedicine()
+            {
+                var responseMessage = await Http.PostAsJsonAsync<Medicine>
+                    ("https://localhost:5001/api/Medicine", newMedicine);
+
+                newMedicine = await responseMessage.Content.ReadFromJsonAsync<Medicine>();
+            }
+}
