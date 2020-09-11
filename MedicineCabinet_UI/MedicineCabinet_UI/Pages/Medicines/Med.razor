@@ -1,0 +1,34 @@
+﻿<div class="card mb-2">
+    <p class="card-body">
+        @Name
+    </p>
+    <p class="card-body">
+        @Quantity
+    </p>
+    <p class="card-body">
+        @Dosage
+    </p>
+    <p class="card-body">
+        @Brand
+    </p>
+    <p class="card-body">
+        @Pharmacy
+    </p>
+</div>
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public int Quantity { get; set; }
+
+    [Parameter]
+    public int Dosage { get; set; }
+
+    [Parameter]
+    public string Brand { get; set; }
+
+    [Parameter]
+    public string Pharmacy { get; set; }
+}

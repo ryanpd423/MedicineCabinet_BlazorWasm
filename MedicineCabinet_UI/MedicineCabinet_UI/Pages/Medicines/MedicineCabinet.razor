@@ -1,0 +1,36 @@
+﻿@using MedicineCabinet_UI.Models
+
+@page "/cabinet"
+@inject HttpClient Http
+
+<h3>Medicine Cabinet</h3>
+
+@if (medicines == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var medicine in medicines)
+    {
+        <Med Name="@medicine.Name"
+             Quantity="@medicine.Quantity"
+             Dosage="@medicine.Dosage"
+             Brand="@medicine.Brand"
+             Pharmacy="@medicine.Pharmacy"/>
+        @*When I named the component 'Medicine'
+            there seemed to be a collision with Model .cs class, 'Medicine'
+            and it wouldn't recognize the Medicine.cs object anymore*@
+    }
+}
+
+@code {
+
+    private Medicine[] medicines;
+
+    protected override async Task OnInitializedAsync()
+    {
+        medicines = await Http.GetFromJsonAsync<Medicine[]>("https://localhost:5001/api/Medicine");
+    }
+
+}
