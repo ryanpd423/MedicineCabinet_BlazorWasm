@@ -1,28 +1,43 @@
 ﻿@using MedicineCabinet_UI.Models
+@inject IJSRuntime JSRuntime;
 
 @page "/cabinet"
 @inject HttpClient Http
 
 <h3>Medicine Cabinet</h3>
 
-@if (medicines == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    @foreach (var medicine in medicines)
+<div class="example-parent"
+     @ondragover="TriggerJsDomOnDragOver"
+         @ondrop="TriggerJsDomOnDrop">
+
+    @if (medicines == null)
     {
-        <Med Name="@medicine.Name"
-             Quantity="@medicine.Quantity"
-             Dosage="@medicine.Dosage"
-             Brand="@medicine.Brand"
-             Pharmacy="@medicine.Pharmacy"/>
-        @*When I named the component 'Medicine'
-            there seemed to be a collision with Model .cs class, 'Medicine'
-            and it wouldn't recognize the Medicine.cs object anymore*@
+        <p><em>Loading...</em></p>
     }
-}
+    else
+    {  
+        <div class="card-columns example-dropzone-left"
+             @ondragover="TriggerJsDomOnDragOver"
+         @ondrop="TriggerJsDomOnDrop">
+            @foreach (var medicine in medicines)
+            {
+                <Med Name="@medicine.Name"
+                     Quantity="@medicine.Quantity"
+                     Dosage="@medicine.Dosage"
+                     Brand="@medicine.Brand"
+                     Pharmacy="@medicine.Pharmacy" />
+                @*When I named the component 'Medicine'
+                    there seemed to be a collision with Model .cs class, 'Medicine'
+                    and it wouldn't recognize the Medicine.cs object anymore*@
+            }
+        </div>
+    }
+    <div class="example-dropzone-right"
+         @ondragover="TriggerJsDomOnDragOver"
+         @ondrop="TriggerJsDomOnDrop">
+        dropzone
+    </div>
+</div>
 
 @code {
 
@@ -33,4 +48,13 @@ else
         medicines = await Http.GetFromJsonAsync<Medicine[]>("https://localhost:5001/api/Medicine");
     }
 
+    public async Task TriggerJsDomOnDragOver()
+    {
+        await JSRuntime.InvokeVoidAsync("exampleJsFunctions.onDragOver", " ");
+    }
+
+    public async Task TriggerJsDomOnDrop()
+    {
+        await JSRuntime.InvokeVoidAsync("exampleJsFunctions.onDrop", " ");
+    }
 }

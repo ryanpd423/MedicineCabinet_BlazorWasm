@@ -1,34 +1,60 @@
-﻿<div class="card mb-2">
-    <p class="card-body">
-        @Name
-    </p>
-    <p class="card-body">
-        @Quantity
-    </p>
-    <p class="card-body">
-        @Dosage
-    </p>
-    <p class="card-body">
-        @Brand
-    </p>
-    <p class="card-body">
-        @Pharmacy
-    </p>
+﻿@inject IJSRuntime JSRuntime;
+
+<div
+     class="card example-draggable"
+     id="draggable-item"
+     style="width: 12rem;"
+     draggable="true"
+     @ondragstart="TriggerJsDomOnDragStart">
+    <div class="card-body">
+        DRAGGABLE
+        <h5 class="card-title">@Name</h5>
+        <ul class="list-group list-group-flush">
+            @*
+                <li class="list-group-item">@Quantity</li>
+            <li class="list-group-item">@Dosage</li>
+            <li class="list-group-item">@Brand</li>
+            <li class="list-group-item">@Pharmacy</li>
+
+                TODO: keep these details in a click-pop modal so you
+                can show as many prescriptions in the medicine cabinet as possible
+
+                TODO: the medicine cards keep layering over eachother, maybe I need
+                to adjust some of .css in app.css to allow for the drop zone to flex
+                and snap
+                *@ 
+        </ul>
+        <a href="#" class="btn btn-primary">Button</a>
+    </div>
 </div>
 
 @code {
-    [Parameter]
-    public string Name { get; set; }
 
-    [Parameter]
-    public int Quantity { get; set; }
+    @*
+        TODO:
+            Will probably need to make multiple drop-zones...with dotted lines
+        *@
 
-    [Parameter]
-    public int Dosage { get; set; }
 
-    [Parameter]
-    public string Brand { get; set; }
 
-    [Parameter]
-    public string Pharmacy { get; set; }
+[Parameter]
+public string Name { get; set; }
+
+[Parameter]
+public int Quantity { get; set; }
+
+[Parameter]
+public int Dosage { get; set; }
+
+[Parameter]
+public string Brand { get; set; }
+
+[Parameter]
+public string Pharmacy { get; set; }
+
+public async Task TriggerJsDomOnDragStart()
+{
+    await JSRuntime.InvokeVoidAsync("exampleJsFunctions.onDragStart", " ");
+}
+
 }
